@@ -61,6 +61,7 @@ group :development do
   gem 'capistrano-bundler', require: false
   gem 'capistrano3-puma',   require: false
   gem 'capistrano-rbenv'
+  gem 'byebug'
 end
 
 group :test do
