@@ -1,0 +1,28 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Posts</h1>
+
+<div id="posts">
+  <table>
+    <thead>
+      <td>Title</td>
+      <td>Content</td>
+      <td>Actions</td>
+    </thead>
+    <tbody>
+      <% @posts.each do |post| %>
+        <tr>
+          <td><%= post.title %></td>
+          <td><%= post.content %></td>
+          <td>
+            <p><%= link_to "Show this post", post %></p>
+            <p>Posted <%= time_tag post.created_at, "data-local": "time-ago" %></p>
+            <p>Has <%= pluralize post.comments.count, "comment" %></p>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= link_to "New post", new_post_path, class: 'button' %>
