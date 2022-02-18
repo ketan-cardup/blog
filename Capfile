@@ -5,6 +5,9 @@ require "capistrano/rails"
 require "capistrano/bundler"
 require "byebug"
 
+require 'dotenv'
+Dotenv.load
+
 require "capistrano/scm/git"
 install_plugin Capistrano::SCM::Git
 

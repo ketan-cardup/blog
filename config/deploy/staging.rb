@@ -7,11 +7,11 @@
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
-server '139.59.46.10',
+server ENV.fetch('SERVER_IP'),
 	user: 'deploy',
 	roles: %w{web db app},
 	ssh_options: {
-		keys: ['~/.ssh/deploy_digital_ocean'],
+		keys: [ENV.fetch('SERVER_SSH_KEY')],
     keys_only: true,
 		auth_methods: %w(publickey),
     forward_agent: true
