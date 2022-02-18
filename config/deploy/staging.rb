@@ -11,7 +11,7 @@ server ENV.fetch('SERVER_IP'),
 	user: 'deploy',
 	roles: %w{web db app},
 	ssh_options: {
-		keys: [ENV.fetch('SERVER_SSH_KEY')],
+		keys: [ENV.fetch('DEPLOY_DIGITAL_OCEAN')],
     keys_only: true,
 		auth_methods: %w(publickey),
     forward_agent: true

@@ -7,12 +7,19 @@ jobs:
     environment: staging
     env:
       SERVER_IP: ${{ secrets.SSH_HOST }}
-      SERVER_SSH_KEY: '~/.ssh/github-actions'
+      DEPLOY_DIGITAL_OCEAN: '~/.ssh/deploy-digital-ocean'
     steps:
-    - name: Install SSH key to Server
+    - name: Install SSH key to Server for Deploy User
       uses: shimataro/ssh-key-action@v2
       with:
-        key: ${{ secrets.SSH_KEY }}
+        key: ${{ secrets.DEPLOY_DIGITAL_OCEAN }}
+        name: deploy-digital-ocean
+        known_hosts: unnecessary
+
+    - name: Install SSH key to Server for Github access via Capistrano
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.SSH_KEY_FOR_GITHUB_ACTIONS }}
         name: github-actions
         known_hosts: unnecessary
 
@@ -28,17 +35,9 @@ jobs:
         ruby-version: 2.7.2
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
-    # - name: List Capistrano Tasks
-    #   run: |
-    #     echo 'PWD'
-    #     pwd
-    #     echo 'ls -a'
-    #     ls -a
-    #     echo 'bundle exec cap -T'
-    #     bundle exec cap -T
-
     - name: Deploy to staging
       run: |
         eval "$(ssh-agent -s)"
+        ssh-add ~/.ssh/deploy-digital-ocean
         ssh-add ~/.ssh/github-actions
         bundle exec cap staging deploy
