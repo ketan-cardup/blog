@@ -7,7 +7,4 @@ set :puma_workers,    0
 set :pty, true
 set :use_sudo, true
 set :deploy_to, "/home/#{fetch(:user)}/#{fetch(:application)}"
-
-server ENV.fetch('SERVER_IP')
-
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', '.bundle', 'public/system', 'public/uploads'
