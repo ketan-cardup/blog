@@ -1,0 +1,8 @@
+name: Different example tryouts with Github Actions
+jobs:
+  Display-Added-Secret:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: 'Print Test Secret'
+        run: echo '${{ secrets.TEST_KEY }}'
