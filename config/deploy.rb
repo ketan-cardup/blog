@@ -7,4 +7,6 @@ set :puma_workers,    0
 set :pty, true
 set :use_sudo, true
 set :deploy_to, "/home/#{fetch(:user)}/#{fetch(:application)}"
+set :migration_role, :db
+set :migration_servers, -> { release_roles(fetch(:migration_role)) }
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', '.bundle', 'public/system', 'public/uploads'
