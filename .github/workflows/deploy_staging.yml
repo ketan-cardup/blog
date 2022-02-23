@@ -1,5 +1,19 @@
 name: Staging Deployment
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Choose a Tag'
+        required: true
+        type: boolean
+      environment:
+        type: environment
+      name:
+        type: choice
+        description: Who to greet
+        options:
+        - monalisa
+        - cschleiden
 jobs:
   deploy:
     name: Capistrano Deploy to Server
@@ -27,14 +41,15 @@ jobs:
         ruby-version: 2.7.2
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
-    - name: Add key to ssh-agent
+    - name: Deploy to staging
       run: |
         eval "$(ssh-agent -s)"
         ssh-add ~/.ssh/deploy-digital-ocean
-
-    - name: Deploy to staging
-      run: bundle exec cap staging deploy
+        bundle exec cap staging deploy
 
     - name: Restart Puma
       if: ${{ success() }}
-      run: bundle exec cap staging deploy:restart
+      run: |
+        eval "$(ssh-agent -s)"
+        ssh-add ~/.ssh/deploy-digital-ocean
+        bundle exec cap staging deploy:restart
