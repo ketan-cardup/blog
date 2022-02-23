@@ -9,19 +9,13 @@ jobs:
       DROPLET_1_IP: ${{ secrets.DROPLET_1_IP }}
       DROPLET_3_IP: ${{ secrets.DROPLET_3_IP }}
       DEPLOY_DIGITAL_OCEAN: '~/.ssh/deploy-digital-ocean'
+
     steps:
     - name: Install SSH key to Server for Deploy User
       uses: shimataro/ssh-key-action@v2
       with:
         key: ${{ secrets.DEPLOY_DIGITAL_OCEAN }}
         name: deploy-digital-ocean
-        known_hosts: unnecessary
-
-    - name: Install SSH key to Server for Github access via Capistrano
-      uses: shimataro/ssh-key-action@v2
-      with:
-        key: ${{ secrets.SSH_KEY_FOR_GITHUB_ACTIONS }}
-        name: github-actions
         known_hosts: unnecessary
 
     - name: Checkout Repo
@@ -33,12 +27,14 @@ jobs:
         ruby-version: 2.7.2
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
-    - name: Deploy to staging
+    - name: Add key to ssh-agent
       run: |
         eval "$(ssh-agent -s)"
         ssh-add ~/.ssh/deploy-digital-ocean
-        bundle exec cap staging deploy
+
+    - name: Deploy to staging
+      run: bundle exec cap staging deploy
 
     - name: Restart Puma
       if: ${{ success() }}
-      run: bundle exec cap deploy restart
+      run: bundle exec cap staging deploy:restart
