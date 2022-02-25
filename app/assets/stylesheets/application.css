@@ -13,3 +13,8 @@
  *= require_tree .
  *= require_self
  */
+
+.title-image {
+  width: 40%;
+  height: 300px;
+}
