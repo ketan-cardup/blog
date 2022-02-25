@@ -2,18 +2,21 @@ name: Staging Deployment
 on:
   workflow_dispatch:
     inputs:
-      tags:
-        description: 'Choose a Tag'
+      droplet_1:
+        description: 'Deploy on Droplet 1'
+        required: true
+        type: boolean
+      droplet_3:
+        description: 'Deploy on Droplet 3'
         required: true
         type: boolean
       environment:
         type: environment
-      name:
-        type: choice
-        description: Who to greet
-        options:
-        - monalisa
-        - cschleiden
+      custom_task:
+        description: 'Custom rake task for execution'
+        required: false
+        type: string
+
 jobs:
   deploy:
     name: Capistrano Deploy to Server
@@ -23,6 +26,8 @@ jobs:
       DROPLET_1_IP: ${{ secrets.DROPLET_1_IP }}
       DROPLET_3_IP: ${{ secrets.DROPLET_3_IP }}
       DEPLOY_DIGITAL_OCEAN: '~/.ssh/deploy-digital-ocean'
+      DROPLET_1_ENABLED: ${{ github.event.inputs.droplet_1 }}
+      DROPLET_3_ENABLED: ${{ github.event.inputs.droplet_3 }}
 
     steps:
     - name: Install SSH key to Server for Deploy User
@@ -47,9 +52,9 @@ jobs:
         ssh-add ~/.ssh/deploy-digital-ocean
         bundle exec cap staging deploy
 
-    - name: Restart Puma
-      if: ${{ success() }}
+    - name: Custom Task
+      if: ${{ github.event.inputs.custom_task != null }}
       run: |
         eval "$(ssh-agent -s)"
         ssh-add ~/.ssh/deploy-digital-ocean
-        bundle exec cap staging deploy:restart
+        bundle exec cap staging deploy:custom_task["${{ github.event.inputs.custom_task }}"]

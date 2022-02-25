@@ -7,25 +7,29 @@
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
-server ENV.fetch('DROPLET_1_IP'),
-	user: 'deploy',
-	roles: %w{web db app},
-	ssh_options: {
-		keys: [ENV.fetch('DEPLOY_DIGITAL_OCEAN')],
-    keys_only: true,
-		auth_methods: %w(publickey),
-    forward_agent: true
-	}
+if ENV.fetch('DROPLET_1_ENABLED') == 'true'
+	server ENV.fetch('DROPLET_1_IP'),
+		user: 'deploy',
+		roles: %w{web db app},
+		ssh_options: {
+			keys: [ENV.fetch('DEPLOY_DIGITAL_OCEAN')],
+			keys_only: true,
+			auth_methods: %w(publickey),
+			forward_agent: true
+		}
+end
 
-server ENV.fetch('DROPLET_3_IP'),
-	user: 'deploy',
-	roles: %w{web db app},
-	ssh_options: {
-		keys: [ENV.fetch('DEPLOY_DIGITAL_OCEAN')],
-    keys_only: true,
-		auth_methods: %w(publickey),
-    forward_agent: true
-	}
+if ENV.fetch('DROPLET_3_ENABLED') == 'true'
+	server ENV.fetch('DROPLET_3_IP'),
+		user: 'deploy',
+		roles: %w{web db app},
+		ssh_options: {
+			keys: [ENV.fetch('DEPLOY_DIGITAL_OCEAN')],
+			keys_only: true,
+			auth_methods: %w(publickey),
+			forward_agent: true
+		}
+end
 
 # role-based syntax
 # ==================
