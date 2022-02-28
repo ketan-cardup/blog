@@ -55,6 +55,7 @@ gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
 # For Serving assets using Cloudfront
 gem "asset_sync"
 gem "fog-aws"
+gem 'dotenv-rails'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -70,8 +71,8 @@ group :development do
   gem 'capistrano3-puma', require: false
   gem 'capistrano-rbenv', require: false
   gem 'byebug'
-  gem 'dotenv-rails'
 end
+
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
