@@ -31,7 +31,7 @@ Rails.application.configure do
   config.assets.compile = true
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  config.asset_host =  "//#{ENV['FOG_DIRECTORY']}.s3.amazonaws.com"
+  config.asset_host = ENV['CDN_HOST']
   config.serve_static_files = true
   config.assets.digest = true
   config.assets.enabled = true
